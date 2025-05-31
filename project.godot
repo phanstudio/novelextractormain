@@ -1,0 +1,48 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Novelextractor"
+config/version="1.5"
+run/main_scene="uid://cjtqifmpno8fg"
+config/features=PackedStringArray("4.4", "Mobile")
+run/low_processor_mode=true
+boot_splash/bg_color=Color(1, 1, 1, 1)
+boot_splash/image="uid://cvwnaxybi3fia"
+config/icon="uid://h8emcikamcgx"
+config/windows_native_icon="res://assets/icon iconset/icon.ico"
+
+[audio]
+
+general/text_to_speech=true
+
+[autoload]
+
+Globals="*res://autoload/globals.gd"
+
+[display]
+
+window/stretch/aspect="ignore"
+window/stretch/scale=2.0
+window/handheld/orientation=1
+
+[gui]
+
+theme/custom="res://maintheme.tres"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[rendering]
+
+renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
