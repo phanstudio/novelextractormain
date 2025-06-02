@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cjtqifmpno8fg"]
+[gd_scene load_steps=6 format=3 uid="uid://b7kuxbmh1bcmg"]
 
-[ext_resource type="Script" uid="uid://dnvtj5fc0f3e7" path="res://scripts/main.gd" id="1_itxqv"]
-[ext_resource type="Texture2D" uid="uid://bbiyrq4jd717c" path="res://assets/svg/download.svg" id="2_v0l8b"]
+[ext_resource type="Script" uid="uid://bnbkvutdh7cbv" path="res://scripts/settings.gd" id="1_ok4lx"]
+[ext_resource type="Texture2D" uid="uid://bbiyrq4jd717c" path="res://assets/svg/download.svg" id="2_uhf66"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0l8b"]
 content_margin_left = 20.0
@@ -28,7 +28,7 @@ content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.176471, 0.192157, 0.258824, 1)
 
-[node name="Main" type="Control" node_paths=PackedStringArray("next_button")]
+[node name="Settings" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,9 +36,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_itxqv")
-next_page = "res://scene/Novel.tscn"
-next_button = NodePath("MarginContainer/Main/ScrollContainer/MarginContainer/Saved/Button")
+script = ExtResource("1_ok4lx")
 
 [node name="MarginContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -100,7 +98,7 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_brvut")
 toggle_mode = true
 text = "Download More"
-icon = ExtResource("2_v0l8b")
+icon = ExtResource("2_uhf66")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/Main"]
 layout_mode = 2

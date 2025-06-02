@@ -15,11 +15,11 @@ func _ready():
 	for i in Globals.novel_data.novels.keys():
 		create_novel(i, Globals.novel_data.novels[i].max_chapter_num)
 
-func create_novel(key, value):
+func create_novel(key, value): # create custom button later
 	var button = Button.new()
 	button.custom_minimum_size.y = 40
 	button.text = ("%s (%s)"%[key, value]).capitalize().replace("-", " ")
-	button.mouse_filter = Control.MOUSE_FILTER_PASS
+	#button.mouse_filter = Control.MOUSE_FILTER_PASS
 	button.pressed.connect(
 		func(): 
 			Globals.selected_novel = key

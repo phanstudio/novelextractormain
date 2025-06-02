@@ -1,0 +1,116 @@
+[gd_scene load_steps=7 format=3 uid="uid://ckqy0sbxpqs0e"]
+
+[ext_resource type="Script" uid="uid://dwmpo3fb27quv" path="res://scene/custom_components/scripts/readersettings.gd" id="1_13llo"]
+[ext_resource type="PackedScene" uid="uid://g6mjwrsvy0mi" path="res://scene/custom_components/option_dropdown.tscn" id="2_ydvxo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ydvxo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rrk82"]
+bg_color = Color(0.165656, 0.165656, 0.165656, 0.537255)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_647pc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13llo"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.101961, 0.105882, 0.184314, 1)
+
+[node name="settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_13llo")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ydvxo")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_rrk82")
+theme_override_styles/hover = SubResource("StyleBoxFlat_rrk82")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_647pc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rrk82")
+action_mode = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 102.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_13llo")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+alignment = 1
+
+[node name="text_align" parent="PanelContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_ydvxo")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/text_align" index="0"]
+text = "Text align"
+
+[node name="OptionButton" parent="PanelContainer/ScrollContainer/VBoxContainer/text_align" index="1"]
+selected = 0
+item_count = 4
+popup/item_0/text = "left"
+popup/item_1/text = "right"
+popup/item_2/text = "fill"
+popup/item_2/id = 2
+popup/item_3/text = "center"
+popup/item_3/id = 3
+
+[node name="voices" parent="PanelContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_ydvxo")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/voices" index="0"]
+text = "Voices"
+
+[node name="OptionButton" parent="PanelContainer/ScrollContainer/VBoxContainer/voices" index="1"]
+selected = -1
+item_count = 0
+
+[node name="skiplastfew" parent="PanelContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_ydvxo")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" parent="PanelContainer/ScrollContainer/VBoxContainer/skiplastfew" index="0"]
+text = "Skip last few chapters"
+
+[node name="OptionButton" parent="PanelContainer/ScrollContainer/VBoxContainer/skiplastfew" index="1"]
+selected = 0
+item_count = 5
+popup/item_0/text = "0"
+popup/item_1/text = "-1"
+popup/item_2/text = "-2"
+popup/item_2/id = 2
+popup/item_3/text = "-3"
+popup/item_3/id = 3
+popup/item_4/text = "-4"
+popup/item_4/id = 4
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="item_selected" from="PanelContainer/ScrollContainer/VBoxContainer/text_align" to="." method="_on_text_align_item_selected"]
+[connection signal="item_selected" from="PanelContainer/ScrollContainer/VBoxContainer/voices" to="." method="_on_voices_item_selected"]
+[connection signal="item_selected" from="PanelContainer/ScrollContainer/VBoxContainer/skiplastfew" to="." method="_on_skiplastfew_item_selected"]
+
+[editable path="PanelContainer/ScrollContainer/VBoxContainer/text_align"]
+[editable path="PanelContainer/ScrollContainer/VBoxContainer/voices"]
+[editable path="PanelContainer/ScrollContainer/VBoxContainer/skiplastfew"]

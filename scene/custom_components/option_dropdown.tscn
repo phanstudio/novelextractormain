@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://g6mjwrsvy0mi"]
+
+[ext_resource type="Script" uid="uid://e85tthjl174a" path="res://scene/custom_components/scripts/option_dropdown.gd" id="1_6ee4y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ee4y"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="OptionDropdown" type="HBoxContainer"]
+offset_right = 120.0
+offset_bottom = 33.0
+alignment = 1
+script = ExtResource("1_6ee4y")
+metadata/_custom_type_script = "uid://e85tthjl174a"
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "option"
+
+[node name="OptionButton" type="OptionButton" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_6ee4y")
+selected = 1
+fit_to_longest_item = false
+item_count = 2
+popup/item_0/text = "love"
+popup/item_0/id = 0
+popup/item_1/text = "lover"
+popup/item_1/id = 1

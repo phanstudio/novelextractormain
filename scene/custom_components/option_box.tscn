@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsb2h8mveidkf"]
+
+[ext_resource type="Script" uid="uid://byu8qj7o0o63x" path="res://scene/custom_components/scripts/option_box.gd" id="1_gq6rk"]
+
+[node name="OptionBox" type="HBoxContainer"]
+offset_right = 81.0
+offset_bottom = 26.0
+alignment = 1
+script = ExtResource("1_gq6rk")
+metadata/_custom_type_script = "uid://byu8qj7o0o63x"
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "option"
+
+[node name="CheckBox" type="CheckBox" parent="."]
+unique_name_in_owner = true
+layout_mode = 2

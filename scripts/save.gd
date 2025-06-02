@@ -2,7 +2,9 @@ extends Resource
 class_name NovelSave
 
 @export var novels: Dictionary[String, NovelData] = {} # novel name -> NovelData
+@export var settings: Dictionary[String, Variant] = {}
 
+# if this breakes 
 func save_chapter_text(novel_data: NovelData, chapter: int, content: String) -> void:
 	var folder_path = "user://novels/%s" % novel_data.name
 	var dir = DirAccess.open("user://")

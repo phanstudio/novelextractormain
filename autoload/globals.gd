@@ -13,11 +13,9 @@ func _ready() -> void:
 func _enter_tree() -> void:
 	novel_data = load_novel_save(save_path)
 	#novel_data = NovelSave.new()
-	pass
 
 func save_info() -> void:
 	save_novel_save(novel_data, save_path)
-	pass
 
 func save_novel_save(save: NovelSave, path := "user://novelsave.tres"):
 	var err = ResourceSaver.save(save, path)

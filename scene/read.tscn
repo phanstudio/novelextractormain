@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://dliwbupvuedto"]
+[gd_scene load_steps=10 format=3 uid="uid://dliwbupvuedto"]
 
 [ext_resource type="Script" uid="uid://bnesrl8ak5o86" path="res://scripts/read.gd" id="1_lyiot"]
 [ext_resource type="Texture2D" uid="uid://bixxklrhp20xv" path="res://assets/svg/arrow-big-left-dash.svg" id="2_jmpur"]
 [ext_resource type="Texture2D" uid="uid://dk7pcjep5qsbi" path="res://assets/svg/audio-lines.svg" id="3_bdpfe"]
 [ext_resource type="Texture2D" uid="uid://pefe7ey6i7kp" path="res://assets/svg/audio-waveform.svg" id="3_boklx"]
+[ext_resource type="Texture2D" uid="uid://2vda4crttnj7" path="res://assets/svg/circle-ellipsis.svg" id="3_ujyl0"]
 [ext_resource type="Texture2D" uid="uid://wqw4s0klj2um" path="res://assets/svg/step-forward.svg" id="4_bdpfe"]
+[ext_resource type="PackedScene" uid="uid://ckqy0sbxpqs0e" path="res://scene/custom_components/readersettings.tscn" id="6_u3p3h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boklx"]
 content_margin_left = 10.0
@@ -24,7 +26,7 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[node name="Control" type="Control" node_paths=PackedStringArray("prev_button")]
+[node name="Read" type="Control" node_paths=PackedStringArray("prev_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,6 +85,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Chapter num"
 
+[node name="settings" type="Button" parent="MarginContainer/Chapters/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+icon = ExtResource("3_ujyl0")
+
 [node name="autoplay" type="Button" parent="MarginContainer/Chapters/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -140,6 +148,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Next"
 
+[node name="readsettings" parent="." node_paths=PackedStringArray("text_parent", "voice_parent") instance=ExtResource("6_u3p3h")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+anchors_preset = 0
+text_parent = NodePath("../MarginContainer/Chapters/body/ScrollContainer/MarginContainer/chapbody")
+voice_parent = NodePath("..")
+
+[connection signal="pressed" from="MarginContainer/Chapters/HBoxContainer/settings" to="." method="_on_settings_pressed"]
 [connection signal="toggled" from="MarginContainer/Chapters/HBoxContainer/autoplay" to="." method="_on_autoplay_toggled"]
 [connection signal="toggled" from="MarginContainer/Chapters/HBoxContainer/play" to="." method="_on_play_toggled"]
 [connection signal="pressed" from="MarginContainer/Chapters/HBoxContainer/pause" to="." method="_on_pause_pressed"]

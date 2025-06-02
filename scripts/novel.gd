@@ -11,7 +11,7 @@ extends Page
 @onready var chapterdownload: HBoxContainer = %chapterdownload
 @onready var downloadtoggle: Button = %downloadtoggle
 @onready var updatetoggle: Button = %updatetoggle
-@onready var currently_reading: Label = %currently_reading
+@onready var currently_reading: Button = %currently_reading
 
 var download_queue: Array[int] = []
 var download_list: Array = []
@@ -26,7 +26,6 @@ const CHECK_CHECK = preload("res://assets/svg/check-check.svg")
 
 func _ready():
 	super._ready()
-	Globals.novel_data.novels.get_or_add(Globals.selected_novel, NovelData.new())
 	if Globals.selected_novel:
 		novel_name.text = Globals.selected_novel
 		chapters.text = "Chapters(%s)"% Globals.novel_data.novels[Globals.selected_novel].max_chapter_num
@@ -36,7 +35,7 @@ func _ready():
 	for i in Globals.novel_data.novels[Globals.selected_novel].max_chapter_num:
 		create_chapters(i)
 	if Globals.novel_data.novels[Globals.selected_novel].current_chapter != 0:
-		currently_reading.text = "currently reading Chapter %s"%(
+		currently_reading.text = "Currently reading Chapter %s"%(
 			Globals.novel_data.novels[Globals.selected_novel].current_chapter)
 
 func create_chapters(key):
@@ -55,7 +54,7 @@ func update_chapters(index, disabled:bool = true):
 	if index+1 not in download_list: # can be better
 		var button = body.get_child(index) as Button
 		button.disabled = disabled
-		button.icon = DOWNLOAD if !disabled else CHECK_LINE
+		button.icon = DOWNLOAD if disabled else CHECK_LINE
 		Globals.save_info()
 
 func update_max(new_max: int):

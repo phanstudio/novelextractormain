@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://yy2bc4x6ej2v"]
+[gd_scene load_steps=19 format=3 uid="uid://yy2bc4x6ej2v"]
 
 [ext_resource type="Script" uid="uid://x0umafx8x0e6" path="res://scripts/novel.gd" id="1_rhcgk"]
 [ext_resource type="Texture2D" uid="uid://bixxklrhp20xv" path="res://assets/svg/arrow-big-left-dash.svg" id="2_5t18o"]
@@ -90,6 +90,22 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rowyq"]
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.901961, 0.223529, 0.27451, 1)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wraff"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rhcgk"]
 content_margin_top = 5.0
 content_margin_bottom = 5.0
@@ -126,7 +142,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_rhcgk")
 next_page = "uid://dliwbupvuedto"
-prev_page = "uid://cjtqifmpno8fg"
+prev_page = "uid://flu6c3mv3dem"
 prev_button = NodePath("MarginContainer/Novel/title/close")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -242,13 +258,14 @@ layout_mode = 2
 text = "download"
 icon = ExtResource("3_yk7lt")
 
-[node name="currently_reading" type="Label" parent="MarginContainer/Novel"]
+[node name="currently_reading" type="Button" parent="MarginContainer/Novel"]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+theme_override_styles/hover = SubResource("StyleBoxFlat_rowyq")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_wraff")
 theme_override_styles/normal = SubResource("StyleBoxFlat_rhcgk")
-text = "Currently reading Chapter 4"
-horizontal_alignment = 1
-vertical_alignment = 1
+text = "Currently reading Chapter 0"
 clip_text = true
 
 [node name="chapters" type="Label" parent="MarginContainer/Novel"]
@@ -307,4 +324,5 @@ expand_icon = true
 [connection signal="toggled" from="MarginContainer/Novel/title/updatetoggle" to="." method="_on_updatetoggle_toggled"]
 [connection signal="pressed" from="MarginContainer/Novel/update/updatebutton" to="." method="_on_updatebutton_pressed"]
 [connection signal="pressed" from="MarginContainer/Novel/chapterdownload/download" to="." method="_on_download_pressed"]
+[connection signal="pressed" from="MarginContainer/Novel/currently_reading" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MarginContainer/Novel/Control/play" to="." method="_on_play_pressed"]
