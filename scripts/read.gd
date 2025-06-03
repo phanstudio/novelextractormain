@@ -76,7 +76,7 @@ func update_max(new_max:int):
 		button.text = tts_chunks[i]
 
 func create_verses(num:int):
-	var button = Button.new()
+	var button = PassthroughButton.new()
 	button.theme = READTHEME
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

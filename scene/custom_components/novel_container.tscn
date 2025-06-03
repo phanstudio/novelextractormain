@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvhi8d6p5cw87"]
+[gd_scene load_steps=6 format=3 uid="uid://dvhi8d6p5cw87"]
 
 [ext_resource type="Texture2D" uid="uid://qexqob8efdwo" path="res://assets/svg/Leonardo_Phoenix_10_Create_an_eyecatching_splash_loading_scree_3.jpg" id="1_6i8bi"]
 [ext_resource type="Script" uid="uid://bd2gfsiylx13t" path="res://scene/custom_components/scripts/novel_container.gd" id="1_gpd6b"]
+[ext_resource type="Script" uid="uid://bsibbsaff6g7i" path="res://scene/custom_components/passthroughbutton.gd" id="3_14ekt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpd6b"]
 corner_radius_top_left = 5
@@ -72,6 +73,8 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_14ekt")
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+script = ExtResource("3_14ekt")
+metadata/_custom_type_script = "uid://bsibbsaff6g7i"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="Control/NovelContainer"]
 unique_name_in_owner = true

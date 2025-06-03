@@ -56,7 +56,7 @@ func process_search_request(_result, response_code, _headers, jsonbody):
 		for i in novel_holder.get_children():
 			novel_holder.remove_child(i)
 		var count:int = json["count"]
-		if count > 1 and json["result"]["name"] != null:
+		if count > 1 and json["results"][0]["name"] != null:
 			load_item(json["results"])
 			return
 		else:
