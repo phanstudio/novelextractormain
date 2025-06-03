@@ -1,7 +1,3 @@
-Great! Here's an updated `README.md` that reflects your app's purpose as a **mobile novel reader** with **text-to-speech** and **auto-advance** features — designed for a smooth, comfortable reading experience anywhere:
-
----
-
 # 📖 NovelFlow – Mobile Reading Made Effortless
 
 **NovelFlow** is a beautiful mobile app built with [Godot Engine](https://godotengine.org/) and powered by a Python backend. It brings you a smooth, immersive experience for reading novels — with **text-to-speech**, **auto page turns**, and the freedom to read or listen from anywhere.
@@ -45,7 +41,6 @@ git clone https://github.com/yourname/novelflow.git
 * 🐍 Python – backend services
 * ❤️ Built for novel lovers who want more freedom and convenience
 
----
 
 ## 📄 License
 
