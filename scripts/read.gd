@@ -30,6 +30,7 @@ const PAUSE = preload("res://assets/svg/pause.svg")
 const STEP_FORWARD = preload("res://assets/svg/step-forward.svg")
 const X = preload("res://assets/svg/x.svg")
 const READTHEME = preload("res://assets/themes/readtheme.tres")
+# review code
 
 func _ready() -> void:
 	super._ready()

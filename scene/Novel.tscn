@@ -1,13 +1,20 @@
-[gd_scene load_steps=19 format=3 uid="uid://yy2bc4x6ej2v"]
+[gd_scene load_steps=24 format=3 uid="uid://yy2bc4x6ej2v"]
 
 [ext_resource type="Script" uid="uid://x0umafx8x0e6" path="res://scripts/novel.gd" id="1_rhcgk"]
 [ext_resource type="Texture2D" uid="uid://bixxklrhp20xv" path="res://assets/svg/arrow-big-left-dash.svg" id="2_5t18o"]
 [ext_resource type="Texture2D" uid="uid://crmavh55epsaw" path="res://assets/svg/arrow-down-to-line.svg" id="3_yk7lt"]
 [ext_resource type="Texture2D" uid="uid://2vda4crttnj7" path="res://assets/svg/circle-ellipsis.svg" id="4_4y36g"]
 [ext_resource type="Texture2D" uid="uid://bbiyrq4jd717c" path="res://assets/svg/download.svg" id="5_5twmx"]
+[ext_resource type="Texture2D" uid="uid://hb86w7ejwgix" path="res://assets/svg/book-open.svg" id="5_d2mup"]
+[ext_resource type="Texture2D" uid="uid://dddsofvosn3xx" path="res://assets/svg/chevron-down.svg" id="5_dmdpw"]
+[ext_resource type="Texture2D" uid="uid://qexqob8efdwo" path="res://assets/svg/Leonardo_Phoenix_10_Create_an_eyecatching_splash_loading_scree_3.jpg" id="5_wq1qs"]
 [ext_resource type="Texture2D" uid="uid://cfkdsgfpnv8wn" path="res://assets/svg/circle-play.svg" id="6_3oiyq"]
+[ext_resource type="Texture2D" uid="uid://bsokmx6rss0m4" path="res://assets/svg/list-filter.svg" id="6_5twmx"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8ub0v"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_wq1qs"]
+font_size = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmdpw"]
 content_margin_left = 5.0
@@ -145,6 +152,9 @@ next_page = "uid://dliwbupvuedto"
 prev_page = "uid://flu6c3mv3dem"
 prev_button = NodePath("MarginContainer/Novel/title/close")
 
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -170,24 +180,15 @@ theme_override_constants/margin_bottom = 20
 [node name="Novel" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="HTTPRequest" type="HTTPRequest" parent="MarginContainer/Novel"]
-unique_name_in_owner = true
-
 [node name="title" type="HBoxContainer" parent="MarginContainer/Novel"]
 layout_mode = 2
 
 [node name="close" type="Button" parent="MarginContainer/Novel/title"]
 material = SubResource("CanvasItemMaterial_8ub0v")
 layout_mode = 2
+size_flags_horizontal = 2
 icon = ExtResource("2_5t18o")
 flat = true
-
-[node name="NovelName" type="Label" parent="MarginContainer/Novel/title"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Novel name"
-clip_text = true
 
 [node name="downloadtoggle" type="Button" parent="MarginContainer/Novel/title"]
 unique_name_in_owner = true
@@ -205,12 +206,70 @@ toggle_mode = true
 icon = ExtResource("4_4y36g")
 flat = true
 
-[node name="update" type="HBoxContainer" parent="MarginContainer/Novel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/Novel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="body" type="VBoxContainer" parent="MarginContainer/Novel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="hero" type="HBoxContainer" parent="MarginContainer/Novel/ScrollContainer/body"]
+layout_mode = 2
+
+[node name="NovelCover" type="TextureRect" parent="MarginContainer/Novel/ScrollContainer/body/hero"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 200)
+layout_mode = 2
+texture = ExtResource("5_wq1qs")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Novel/ScrollContainer/body/hero"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="NovelName" type="Label" parent="MarginContainer/Novel/ScrollContainer/body/hero/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Novel name"
+label_settings = SubResource("LabelSettings_wq1qs")
+autowrap_mode = 3
+
+[node name="NovelAuthor" type="Label" parent="MarginContainer/Novel/ScrollContainer/body/hero/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Novel author"
+autowrap_mode = 3
+
+[node name="actions" type="HBoxContainer" parent="MarginContainer/Novel/ScrollContainer/body"]
+layout_mode = 2
+alignment = 1
+
+[node name="save" type="Button" parent="MarginContainer/Novel/ScrollContainer/body/actions"]
+material = SubResource("CanvasItemMaterial_8ub0v")
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+icon = ExtResource("5_d2mup")
+flat = true
+icon_alignment = 1
+
+[node name="Control" type="Control" parent="MarginContainer/Novel/ScrollContainer/body/actions"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="update" type="HBoxContainer" parent="MarginContainer/Novel/ScrollContainer/body"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="max_chapters" type="TextEdit" parent="MarginContainer/Novel/update"]
+[node name="max_chapters" type="TextEdit" parent="MarginContainer/Novel/ScrollContainer/body/update"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -219,22 +278,22 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_dmdpw")
 theme_override_styles/focus = SubResource("StyleBoxFlat_d2mup")
 placeholder_text = "Max Chapters Number (3)"
 
-[node name="updatebutton" type="Button" parent="MarginContainer/Novel/update"]
+[node name="updatebutton" type="Button" parent="MarginContainer/Novel/ScrollContainer/body/update"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Update"
 icon = ExtResource("5_5twmx")
 
-[node name="chapterdownload" type="HBoxContainer" parent="MarginContainer/Novel"]
+[node name="chapterdownload" type="HBoxContainer" parent="MarginContainer/Novel/ScrollContainer/body"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Chapternum" type="Label" parent="MarginContainer/Novel/chapterdownload"]
+[node name="Chapternum" type="Label" parent="MarginContainer/Novel/ScrollContainer/body/chapterdownload"]
 layout_mode = 2
 text = "Chapter"
 
-[node name="from" type="TextEdit" parent="MarginContainer/Novel/chapterdownload"]
+[node name="from" type="TextEdit" parent="MarginContainer/Novel/ScrollContainer/body/chapterdownload"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -243,7 +302,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_wq1qs")
 theme_override_styles/focus = SubResource("StyleBoxFlat_nwtvr")
 placeholder_text = "from"
 
-[node name="to" type="TextEdit" parent="MarginContainer/Novel/chapterdownload"]
+[node name="to" type="TextEdit" parent="MarginContainer/Novel/ScrollContainer/body/chapterdownload"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -252,13 +311,53 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_t8l8r")
 theme_override_styles/focus = SubResource("StyleBoxFlat_iqdav")
 placeholder_text = "to"
 
-[node name="download" type="Button" parent="MarginContainer/Novel/chapterdownload"]
+[node name="download" type="Button" parent="MarginContainer/Novel/ScrollContainer/body/chapterdownload"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "download"
 icon = ExtResource("3_yk7lt")
 
-[node name="currently_reading" type="Button" parent="MarginContainer/Novel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Novel/ScrollContainer/body"]
+layout_mode = 2
+
+[node name="NovelDesc" type="Label" parent="MarginContainer/Novel/ScrollContainer/body/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "novel description"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="ExpandButton" type="Button" parent="MarginContainer/Novel/ScrollContainer/body/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+icon = ExtResource("5_dmdpw")
+flat = true
+icon_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Novel/ScrollContainer/body"]
+layout_mode = 2
+
+[node name="chapters" type="Label" parent="MarginContainer/Novel/ScrollContainer/body/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Chapters"
+
+[node name="filterbutton" type="MenuButton" parent="MarginContainer/Novel/ScrollContainer/body/HBoxContainer"]
+unique_name_in_owner = true
+material = SubResource("CanvasItemMaterial_8ub0v")
+layout_mode = 2
+icon = ExtResource("6_5twmx")
+item_count = 2
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Only downloaded"
+popup/item_1/id = 1
+
+[node name="currently_reading" type="Button" parent="MarginContainer/Novel/ScrollContainer/body"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -268,30 +367,20 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_rhcgk")
 text = "Currently reading Chapter 0"
 clip_text = true
 
-[node name="chapters" type="Label" parent="MarginContainer/Novel"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Chapters"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/Novel"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="MarginContainer" type="PanelContainer" parent="MarginContainer/Novel/ScrollContainer"]
+[node name="MarginContainer" type="PanelContainer" parent="MarginContainer/Novel/ScrollContainer/body"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
 
-[node name="body" type="VBoxContainer" parent="MarginContainer/Novel/ScrollContainer/MarginContainer"]
+[node name="body" type="VBoxContainer" parent="MarginContainer/Novel/ScrollContainer/body/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="MarginContainer/Novel/ScrollContainer/MarginContainer/body"]
+[node name="Button" type="Button" parent="MarginContainer/Novel/ScrollContainer/body/MarginContainer/body"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 mouse_filter = 1
@@ -322,7 +411,8 @@ expand_icon = true
 
 [connection signal="toggled" from="MarginContainer/Novel/title/downloadtoggle" to="." method="_on_downloadtoggle_toggled"]
 [connection signal="toggled" from="MarginContainer/Novel/title/updatetoggle" to="." method="_on_updatetoggle_toggled"]
-[connection signal="pressed" from="MarginContainer/Novel/update/updatebutton" to="." method="_on_updatebutton_pressed"]
-[connection signal="pressed" from="MarginContainer/Novel/chapterdownload/download" to="." method="_on_download_pressed"]
-[connection signal="pressed" from="MarginContainer/Novel/currently_reading" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="MarginContainer/Novel/ScrollContainer/body/update/updatebutton" to="." method="_on_updatebutton_pressed"]
+[connection signal="pressed" from="MarginContainer/Novel/ScrollContainer/body/chapterdownload/download" to="." method="_on_download_pressed"]
+[connection signal="toggled" from="MarginContainer/Novel/ScrollContainer/body/VBoxContainer/ExpandButton" to="." method="_on_expand_button_toggled"]
+[connection signal="pressed" from="MarginContainer/Novel/ScrollContainer/body/currently_reading" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MarginContainer/Novel/Control/play" to="." method="_on_play_pressed"]

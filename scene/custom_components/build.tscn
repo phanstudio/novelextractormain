@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfj65qians1eg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwfxb"]
+bg_color = Color(0.39, 0.39, 0.39, 0.478431)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nki8"]
+bg_color = Color(0.39, 0.39, 0.39, 0.478431)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="build" type="VBoxContainer"]
+custom_minimum_size = Vector2(140, 200)
+mouse_filter = 2
+
+[node name="ColorRect" type="Panel" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_hwfxb")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ColorRect2" type="Panel" parent="HBoxContainer"]
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.55
+theme_override_styles/panel = SubResource("StyleBoxFlat_5nki8")
+
+[node name="ColorRect3" type="Panel" parent="HBoxContainer"]
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_5nki8")

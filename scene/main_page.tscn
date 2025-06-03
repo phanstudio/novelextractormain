@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://flu6c3mv3dem"]
+[gd_scene load_steps=9 format=3 uid="uid://flu6c3mv3dem"]
 
 [ext_resource type="PackedScene" uid="uid://b7kuxbmh1bcmg" path="res://scene/settings.tscn" id="1_aken3"]
 [ext_resource type="PackedScene" uid="uid://cjtqifmpno8fg" path="res://scene/main.tscn" id="2_kjc7l"]
+[ext_resource type="PackedScene" uid="uid://by0liv6qg2fat" path="res://scene/browse.tscn" id="3_kjc7l"]
 [ext_resource type="Script" uid="uid://dw7u8gbcet84j" path="res://scene/custom_components/scripts/tab_body.gd" id="3_tcohb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dl4ha"]
@@ -62,10 +63,15 @@ tabs_visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Settings" parent="VBoxContainer/TabContainer" instance=ExtResource("1_aken3")]
+[node name="Browse" parent="VBoxContainer/TabContainer" instance=ExtResource("3_kjc7l")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
+
+[node name="Settings" parent="VBoxContainer/TabContainer" instance=ExtResource("1_aken3")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2

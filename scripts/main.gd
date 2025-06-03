@@ -6,7 +6,9 @@ extends Page
 @onready var novel_num: TextEdit = %NovelNum
 @onready var alert: Label = %alert
 @onready var saved: VBoxContainer = %Saved
+
 const NOVEL = preload("res://scene/Novel.tscn")
+
 var tween: Tween
 
 func _ready():

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bixxklrhp20xv" path="res://assets/svg/arrow-big-left-dash.svg" id="2_jmpur"]
 [ext_resource type="Texture2D" uid="uid://dk7pcjep5qsbi" path="res://assets/svg/audio-lines.svg" id="3_bdpfe"]
 [ext_resource type="Texture2D" uid="uid://pefe7ey6i7kp" path="res://assets/svg/audio-waveform.svg" id="3_boklx"]
-[ext_resource type="Texture2D" uid="uid://2vda4crttnj7" path="res://assets/svg/circle-ellipsis.svg" id="3_ujyl0"]
+[ext_resource type="Texture2D" uid="uid://dllr37x3mo0a" path="res://assets/svg/settings.svg" id="3_ujyl0"]
 [ext_resource type="Texture2D" uid="uid://wqw4s0klj2um" path="res://assets/svg/step-forward.svg" id="4_bdpfe"]
 [ext_resource type="PackedScene" uid="uid://ckqy0sbxpqs0e" path="res://scene/custom_components/readersettings.tscn" id="6_u3p3h"]
 
@@ -74,7 +74,9 @@ icon = ExtResource("2_jmpur")
 [node name="NovelName" type="Label" parent="MarginContainer/Chapters/title"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Novel name"
+horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Chapters"]
 layout_mode = 2

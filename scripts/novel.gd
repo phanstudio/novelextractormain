@@ -12,6 +12,11 @@ extends Page
 @onready var downloadtoggle: Button = %downloadtoggle
 @onready var updatetoggle: Button = %updatetoggle
 @onready var currently_reading: Button = %currently_reading
+@onready var filterbutton: MenuButton = %filterbutton
+@onready var expand_button: Button = %ExpandButton
+@onready var novel_desc: Label = %NovelDesc
+@onready var novel_cover: TextureRect = %NovelCover
+@onready var novel_author: Label = %NovelAuthor
 
 var download_queue: Array[int] = []
 var download_list: Array = []
@@ -23,20 +28,41 @@ const DOWNLOAD = preload("res://assets/svg/download.svg")
 const CHECK_LINE = preload("res://assets/svg/check-line.svg")
 const CHECK = preload("res://assets/svg/check.svg")
 const CHECK_CHECK = preload("res://assets/svg/check-check.svg")
+const CHEVRON_UP = preload("res://assets/svg/chevron-up.svg")
+const CHEVRON_DOWN = preload("res://assets/svg/chevron-down.svg")
 
 func _ready():
 	super._ready()
-	if Globals.selected_novel:
-		novel_name.text = Globals.selected_novel
-		chapters.text = "Chapters(%s)"% Globals.novel_data.novels[Globals.selected_novel].max_chapter_num
 	http_request.request_completed.connect(_on_HTTPRequest_request_completed)
 	for i in body.get_children(): body.remove_child(i)
-	download_list = Globals.novel_data.novels[Globals.selected_novel].chapters.keys()
-	for i in Globals.novel_data.novels[Globals.selected_novel].max_chapter_num:
+	generate_content(Globals.selected_novel, Globals.novel_data.novels[Globals.selected_novel].max_chapter_num)
+	filterbutton.get_popup().index_pressed.connect(_update_filter)
+
+func generate_content(nov_name:String, chap_num:int, nov_desc:String =""):
+	if novel_name:
+		novel_name.text = nov_name
+		chapters.text = "Chapters(%s)"% chap_num
+	if nov_desc:
+		novel_desc.text = nov_desc
+	if Globals.novel_data.novels.has(nov_name):
+		download_list = Globals.novel_data.novels[nov_name].chapters.keys()
+	for i in chap_num:
 		create_chapters(i)
-	if Globals.novel_data.novels[Globals.selected_novel].current_chapter != 0:
-		currently_reading.text = "Currently reading Chapter %s"%(
-			Globals.novel_data.novels[Globals.selected_novel].current_chapter)
+	if Globals.novel_data.novels.has(nov_name):
+		if Globals.novel_data.novels[nov_name].current_chapter != 0:
+			currently_reading.text = "Currently reading Chapter %s"%(
+				Globals.novel_data.novels[nov_name].current_chapter)
+
+func set_cover(img:Texture):
+	novel_cover.texture = img
+
+func _update_filter(id):
+	var filters = filterbutton.get_popup().get_item_text(id)
+	match filters:
+		"None":
+			pass # implement filter
+		"Only download":
+			pass
 
 func create_chapters(key):
 	var button = Button.new()
@@ -141,3 +167,13 @@ func _on_updatetoggle_toggled(toggled_on: bool) -> void:
 		updatetoggle.icon = close
 	else:
 		updatetoggle.icon = CIRCLE_ELLIPSIS
+
+func _on_expand_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		expand_button.icon = CHEVRON_UP
+		novel_desc.max_lines_visible = -1
+	else:
+		expand_button.icon = CHEVRON_DOWN
+		novel_desc.max_lines_visible = 2
+	novel_desc.text += " "
+	novel_desc.text = novel_desc.text.rstrip(" ")
