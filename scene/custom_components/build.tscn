@@ -1,14 +1,14 @@
 [gd_scene load_steps=3 format=3 uid="uid://bfj65qians1eg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwfxb"]
-bg_color = Color(0.39, 0.39, 0.39, 0.478431)
+bg_color = Color(0.176471, 0.192157, 0.258824, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nki8"]
-bg_color = Color(0.39, 0.39, 0.39, 0.478431)
+bg_color = Color(0.176471, 0.192157, 0.258824, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5

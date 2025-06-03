@@ -51,7 +51,8 @@ func load_novel():
 		prevbutton.disabled = false if pos > 0 else true
 		Globals.novel_data.novels[Globals.selected_novel].current_chapter = Globals.selected_chapter
 		Globals.save_info()
-		tts_chunks = split_text(remove_filler(Globals.novel_data.novels[Globals.selected_novel].chapters[Globals.selected_chapter]))
+		var loaded_text:String = Globals.novel_data.load_chapter_text(Globals.novel_data.novels[Globals.selected_novel], Globals.selected_chapter)
+		tts_chunks = split_text(remove_filler(loaded_text))
 		tts_index = 0
 		update_max(tts_chunks.size())
 		if auto:

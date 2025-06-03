@@ -82,3 +82,6 @@ layout_mode = 2
 alignment = 1
 script = ExtResource("3_tcohb")
 tab_container = NodePath("../../TabContainer")
+
+[connection signal="tab_changed" from="VBoxContainer/TabContainer" to="VBoxContainer/TabContainer/Home" method="_on_tab_container_tab_changed"]
+[connection signal="tab_changed" from="VBoxContainer/TabContainer" to="VBoxContainer/TabContainer/Browse" method="_on_tab_container_tab_changed"]

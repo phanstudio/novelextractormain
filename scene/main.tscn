@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cjtqifmpno8fg"]
+[gd_scene load_steps=4 format=3 uid="uid://cjtqifmpno8fg"]
 
 [ext_resource type="Script" uid="uid://dnvtj5fc0f3e7" path="res://scripts/main.gd" id="1_itxqv"]
-[ext_resource type="Texture2D" uid="uid://bbiyrq4jd717c" path="res://assets/svg/download.svg" id="2_v0l8b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0l8b"]
 content_margin_left = 20.0
@@ -9,17 +8,6 @@ content_margin_top = 20.0
 content_margin_right = 20.0
 content_margin_bottom = 20.0
 bg_color = Color(0.101961, 0.105882, 0.184314, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_brvut"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.901961, 0.223529, 0.27451, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wp4xf"]
 content_margin_left = 10.0
@@ -55,52 +43,14 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 9
 
-[node name="downloadcontainer" type="VBoxContainer" parent="MarginContainer/Main"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
-[node name="NovelName" type="TextEdit" parent="MarginContainer/Main/downloadcontainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-placeholder_text = "Novel Name (ill-surpass-the-mc)"
-
-[node name="NovelNum" type="TextEdit" parent="MarginContainer/Main/downloadcontainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-placeholder_text = "Max Chapters Number (3)"
-
-[node name="download" type="Button" parent="MarginContainer/Main/downloadcontainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-text = "Download"
-
-[node name="alert" type="Label" parent="MarginContainer/Main/downloadcontainer"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_vertical = 0
-autowrap_mode = 3
-
 [node name="title" type="HBoxContainer" parent="MarginContainer/Main"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/Main/title"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Saved"
-
-[node name="downloadmore" type="Button" parent="MarginContainer/Main/title"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_brvut")
-toggle_mode = true
-text = "Download More"
-icon = ExtResource("2_v0l8b")
+text = "Library"
+horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/Main"]
 layout_mode = 2
@@ -113,7 +63,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wp4xf")
 
-[node name="Saved" type="VBoxContainer" parent="MarginContainer/Main/ScrollContainer/MarginContainer"]
+[node name="Saved" type="HFlowContainer" parent="MarginContainer/Main/ScrollContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -124,6 +74,3 @@ mouse_filter = 2
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "ill surpass the mc (400)"
-
-[connection signal="pressed" from="MarginContainer/Main/downloadcontainer/download" to="." method="_on_download_pressed"]
-[connection signal="toggled" from="MarginContainer/Main/title/downloadmore" to="." method="_on_downloadmore_toggled"]

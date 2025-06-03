@@ -18,8 +18,12 @@ func _ready() -> void:
 func set_info(label_text: String):
 	label.text = label_text
 
-func get_image_from_url(url:String):
-	http_request.request(url)
+func get_image_from_url(url:String, image_object:ImageTexture=null):
+	if !url.is_empty():
+		http_request.request(url)
+	if image_object:
+		texture_rect.texture = image_object
+		image_loaded.emit()
 
 func _on_http_request_request_completed(result, _response_code, _headers, body):
 	if result != HTTPRequest.RESULT_SUCCESS:

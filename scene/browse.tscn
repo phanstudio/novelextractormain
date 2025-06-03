@@ -1,8 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://by0liv6qg2fat"]
+[gd_scene load_steps=21 format=3 uid="uid://by0liv6qg2fat"]
 
-[ext_resource type="Script" uid="uid://bxdx5gyxb137q" path="res://scene/custom_components/scripts/browse.gd" id="1_l0m82"]
+[ext_resource type="Script" uid="uid://bxdx5gyxb137q" path="res://scripts/browse.gd" id="1_l0m82"]
+[ext_resource type="Texture2D" uid="uid://tvhl7jwl7b7n" path="res://assets/svg/refresh-cw.svg" id="2_3js8e"]
 [ext_resource type="PackedScene" uid="uid://bvl0ko8a6aeu1" path="res://scene/custom_components/loading_bar.tscn" id="2_86anp"]
+[ext_resource type="Texture2D" uid="uid://bcrkgncj31yaj" path="res://assets/svg/x.svg" id="2_xeohp"]
+[ext_resource type="Texture2D" uid="uid://cwkme5uibanec" path="res://assets/svg/search.svg" id="3_3js8e"]
 [ext_resource type="PackedScene" uid="uid://yy2bc4x6ej2v" path="res://scene/Novel.tscn" id="3_55mb8"]
+[ext_resource type="Texture2D" uid="uid://bixxklrhp20xv" path="res://assets/svg/arrow-big-left-dash.svg" id="4_ojkyp"]
+[ext_resource type="Texture2D" uid="uid://bam8ilvog10jw" path="res://assets/svg/cloud-alert.svg" id="6_7hrul"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0l8b"]
 content_margin_left = 20.0
@@ -11,12 +16,92 @@ content_margin_right = 20.0
 content_margin_bottom = 20.0
 bg_color = Color(0.101961, 0.105882, 0.184314, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3oiyq"]
+content_margin_left = 10.0
+content_margin_top = 0.0
+content_margin_right = 10.0
+content_margin_bottom = 0.0
+bg_color = Color(0.176471, 0.192157, 0.258824, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5sd4q"]
+content_margin_left = 20.0
+content_margin_right = 20.0
+bg_color = Color(0.176471, 0.192157, 0.258824, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_xeohp"]
+font_color = Color(0.901961, 0.223529, 0.27451, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wp4xf"]
 content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
-bg_color = Color(0.176471, 0.192157, 0.258824, 1)
+bg_color = Color(0.101961, 0.105882, 0.184314, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ojkyp"]
+atlas = ExtResource("6_7hrul")
+region = Rect2(1, 3, 22, 18)
+
+[sub_resource type="LabelSettings" id="LabelSettings_jw2kc"]
+font_size = 30
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8ub0v"]
+
+[sub_resource type="Animation" id="Animation_5sd4q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_55mb8"]
+resource_name = "load"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.447059), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gh6go"]
+_data = {
+&"RESET": SubResource("Animation_5sd4q"),
+&"load": SubResource("Animation_55mb8")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hrul"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.901961, 0.223529, 0.27451, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
 
 [node name="Browse" type="Control"]
 layout_mode = 3
@@ -28,7 +113,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_l0m82")
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[node name="BrowseRequest" type="HTTPRequest" parent="."]
 
 [node name="MarginContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -45,14 +130,74 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 9
 
-[node name="title" type="HBoxContainer" parent="MarginContainer/Main"]
+[node name="MarginContainer4" type="PanelContainer" parent="MarginContainer/Main"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="title" type="HBoxContainer" parent="MarginContainer/Main/MarginContainer4"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/Main/title"]
+[node name="Control" type="Control" parent="MarginContainer/Main/MarginContainer4/title"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="MarginContainer/Main/MarginContainer4/title"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Browse"
 horizontal_alignment = 1
+
+[node name="reloadButton" type="Button" parent="MarginContainer/Main/MarginContainer4/title"]
+layout_mode = 2
+size_flags_vertical = 0
+icon = ExtResource("2_3js8e")
+flat = true
+
+[node name="searchbar" type="MarginContainer" parent="MarginContainer/Main"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Main/searchbar"]
+layout_mode = 2
+
+[node name="clearButton" type="Button" parent="MarginContainer/Main/searchbar/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+icon = ExtResource("2_xeohp")
+flat = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Main/searchbar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="search" type="TextEdit" parent="MarginContainer/Main/searchbar/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_5sd4q")
+placeholder_text = "Search here"
+
+[node name="alert" type="Label" parent="MarginContainer/Main/searchbar/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "at least 3 letters"
+label_settings = SubResource("LabelSettings_xeohp")
+
+[node name="searchbutton" type="Button" parent="MarginContainer/Main/searchbar/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "search"
+icon = ExtResource("3_3js8e")
+
+[node name="searchRequest" type="HTTPRequest" parent="MarginContainer/Main/searchbar"]
+unique_name_in_owner = true
 
 [node name="MarginContainer" type="PanelContainer" parent="MarginContainer/Main"]
 layout_mode = 2
@@ -79,7 +224,64 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="error_page" type="VBoxContainer" parent="MarginContainer/Main/MarginContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Main/MarginContainer/error_page"]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 10
+texture = SubResource("AtlasTexture_ojkyp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Main/MarginContainer/error_page"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MarginContainer/Main/MarginContainer/error_page/VBoxContainer"]
+layout_mode = 2
+text = "oops.."
+label_settings = SubResource("LabelSettings_jw2kc")
+horizontal_alignment = 1
+
+[node name="error" type="Label" parent="MarginContainer/Main/MarginContainer/error_page/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Something went wrong"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="MarginContainer/Main/MarginContainer/error_page/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+text = "Reload Page"
+
+[node name="Control" parent="." node_paths=PackedStringArray("prev_button") instance=ExtResource("3_55mb8")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+not_main = true
+next_page = ""
+prev_page = ""
+prev_button = NodePath("MarginContainer/Novel/ScrollContainer/body/currently_reading")
+
+[node name="currently_reading" parent="Control/MarginContainer/Novel/ScrollContainer/body" index="4"]
+visible = false
+
+[node name="play" parent="Control/MarginContainer/Novel/Control" index="0"]
+visible = false
+
+[node name="NovelRequest" type="HTTPRequest" parent="Control"]
+unique_name_in_owner = true
+
+[node name="NovelLoading" type="Control" parent="."]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -88,23 +290,176 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Control" parent="." node_paths=PackedStringArray("prev_button") instance=ExtResource("3_55mb8")]
-unique_name_in_owner = true
+[node name="ColorRect" type="ColorRect" parent="NovelLoading"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.101961, 0.105882, 0.184314, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="NovelLoading"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Novel" type="VBoxContainer" parent="NovelLoading/MarginContainer"]
+layout_mode = 2
+
+[node name="title" type="HBoxContainer" parent="NovelLoading/MarginContainer/Novel"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="NovelLoading/MarginContainer/Novel/title"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="close" type="Button" parent="NovelLoading/MarginContainer/Novel/title/Control"]
+top_level = true
+material = SubResource("CanvasItemMaterial_8ub0v")
+layout_mode = 1
+offset_left = 21.0
+offset_top = 10.0
+offset_right = 55.0
+offset_bottom = 44.0
+size_flags_horizontal = 2
+icon = ExtResource("4_ojkyp")
+flat = true
+
+[node name="MarginContainer7" type="Panel" parent="NovelLoading/MarginContainer/Novel/title"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="MarginContainer8" type="Panel" parent="NovelLoading/MarginContainer/Novel/title"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="hero" type="HBoxContainer" parent="NovelLoading/MarginContainer/Novel"]
+layout_mode = 2
+
+[node name="MarginContainer7" type="Panel" parent="NovelLoading/MarginContainer/Novel/hero"]
+custom_minimum_size = Vector2(140, 200)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NovelLoading/MarginContainer/Novel/hero"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="MarginContainer4" type="Panel" parent="NovelLoading/MarginContainer/Novel/hero/VBoxContainer"]
+custom_minimum_size = Vector2(100, 26)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="MarginContainer5" type="Panel" parent="NovelLoading/MarginContainer/Novel/hero/VBoxContainer"]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="MarginContainer6" type="Panel" parent="NovelLoading/MarginContainer/Novel/hero/VBoxContainer"]
+custom_minimum_size = Vector2(120, 26)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="actions" type="HBoxContainer" parent="NovelLoading/MarginContainer/Novel"]
+layout_mode = 2
+alignment = 1
+
+[node name="MarginContainer7" type="Panel" parent="NovelLoading/MarginContainer/Novel/actions"]
+custom_minimum_size = Vector2(100, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="MarginContainer8" type="Panel" parent="NovelLoading/MarginContainer/Novel/actions"]
+custom_minimum_size = Vector2(100, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="MarginContainer3" type="Panel" parent="NovelLoading/MarginContainer/Novel"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="MarginContainer" type="Panel" parent="NovelLoading/MarginContainer/Novel"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="MarginContainer2" type="Panel" parent="NovelLoading/MarginContainer/Novel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3oiyq")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="NovelLoading"]
+libraries = {
+&"": SubResource("AnimationLibrary_gh6go")
+}
+autoplay = "load"
+
+[node name="errorAlert" type="Control" parent="."]
 visible = false
 layout_mode = 1
-next_page = ""
-prev_page = ""
-prev_button = NodePath("MarginContainer/Novel/ScrollContainer/body/currently_reading")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="currently_reading" parent="Control/MarginContainer/Novel/ScrollContainer/body" index="6"]
-visible = false
+[node name="Label" type="Label" parent="errorAlert"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -65.0
+offset_right = 20.0
+offset_bottom = -42.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_7hrul")
+text = "An error occured"
 
-[node name="play" parent="Control/MarginContainer/Novel/Control" index="0"]
-visible = false
-
-[node name="HTTPRequest2" type="HTTPRequest" parent="Control"]
-unique_name_in_owner = true
-
+[connection signal="pressed" from="MarginContainer/Main/MarginContainer4/title/reloadButton" to="." method="_on_reload_button_2_pressed"]
+[connection signal="pressed" from="MarginContainer/Main/searchbar/HBoxContainer/clearButton" to="." method="_on_clear_pressed"]
+[connection signal="text_changed" from="MarginContainer/Main/searchbar/HBoxContainer/VBoxContainer/search" to="." method="_on_search_text_changed"]
+[connection signal="pressed" from="MarginContainer/Main/searchbar/HBoxContainer/searchbutton" to="." method="_on_searchbutton_pressed"]
+[connection signal="pressed" from="MarginContainer/Main/MarginContainer/error_page/VBoxContainer/Button" to="." method="_on_reload_button_2_pressed"]
 [connection signal="pressed" from="Control/MarginContainer/Novel/title/close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="Control/MarginContainer/Novel/ScrollContainer/body/actions/saveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="NovelLoading/MarginContainer/Novel/title/Control/close" to="." method="_on_close_pressed"]
 
 [editable path="Control"]

@@ -37,7 +37,8 @@ script = ExtResource("1_lyiot")
 prev_page = "uid://yy2bc4x6ej2v"
 prev_button = NodePath("MarginContainer/Chapters/title/close")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="colorbg" type="ColorRect" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

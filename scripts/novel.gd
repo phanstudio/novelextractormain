@@ -2,14 +2,10 @@ extends Page
 
 @onready var http_request: HTTPRequest = %HTTPRequest
 @onready var novel_name: Label = %NovelName
-@onready var max_chapters: TextEdit = %max_chapters
 @onready var from: TextEdit = %from
 @onready var to: TextEdit = %to
 @onready var body: VBoxContainer = %body
 @onready var chapters: Label = %chapters
-@onready var update: HBoxContainer = %update
-@onready var chapterdownload: HBoxContainer = %chapterdownload
-@onready var downloadtoggle: Button = %downloadtoggle
 @onready var updatetoggle: Button = %updatetoggle
 @onready var currently_reading: Button = %currently_reading
 @onready var filterbutton: MenuButton = %filterbutton
@@ -17,9 +13,19 @@ extends Page
 @onready var novel_desc: Label = %NovelDesc
 @onready var novel_cover: TextureRect = %NovelCover
 @onready var novel_author: Label = %NovelAuthor
+@onready var novel_status: Label = %NovelStatus
+@onready var save_button: Button = %saveButton
+@onready var novel_data: NovelData= NovelData.new()
+@onready var downloadbutton: MenuButton = %downloadbutton
+@onready var customdownloadpopuup: PopupPanel = %customdownloadpopuup
+
+@export var not_main:bool = false
 
 var download_queue: Array[int] = []
 var download_list: Array = []
+var current_novel: String
+var request_handeled: bool = false
+
 const close: Texture = preload("res://assets/svg/x.svg")
 const CIRCLE_ELLIPSIS = preload("res://assets/svg/circle-ellipsis.svg")
 const ARROW_DOWN_TO_LINE = preload("res://assets/svg/arrow-down-to-line.svg")
@@ -30,33 +36,61 @@ const CHECK = preload("res://assets/svg/check.svg")
 const CHECK_CHECK = preload("res://assets/svg/check-check.svg")
 const CHEVRON_UP = preload("res://assets/svg/chevron-up.svg")
 const CHEVRON_DOWN = preload("res://assets/svg/chevron-down.svg")
+const CIRCLE_CHECK_BIG = preload("res://assets/svg/circle-check-big.svg")
+const BOOK_OPEN = preload("res://assets/svg/book-open.svg")
 
 func _ready():
 	super._ready()
 	http_request.request_completed.connect(_on_HTTPRequest_request_completed)
-	for i in body.get_children(): body.remove_child(i)
-	generate_content(Globals.selected_novel, Globals.novel_data.novels[Globals.selected_novel].max_chapter_num)
+	current_novel = Globals.selected_novel
+	if Globals.novel_data.novels.has(current_novel):
+		genrate_from_novel_url(current_novel)
+		save_button.icon = CIRCLE_CHECK_BIG
+		novel_data = Globals.novel_data.novels[current_novel]
+	if !not_main:
+		save_button.pressed.connect(interact_with_lib)
 	filterbutton.get_popup().index_pressed.connect(_update_filter)
+	downloadbutton.get_popup().index_pressed.connect(_download_chapters)
 
-func generate_content(nov_name:String, chap_num:int, nov_desc:String =""):
+## put things like name, url, cover and so on
+func _set_novel_properties(propeties:Dictionary):
+	for i in propeties.keys():
+		novel_data.set(i, propeties[i])
+
+func generate_content(nov_path:String, nov_name:String, chap_num:int, nov_desc:String =""):
+	for i in body.get_children(): body.remove_child(i)
 	if novel_name:
 		novel_name.text = nov_name
 		chapters.text = "Chapters(%s)"% chap_num
 	if nov_desc:
 		novel_desc.text = nov_desc
-	if Globals.novel_data.novels.has(nov_name):
-		download_list = Globals.novel_data.novels[nov_name].chapters.keys()
+	if Globals.novel_data.novels.has(nov_path):
+		download_list = Globals.novel_data.novels[nov_path].chapters.keys()
+	else:
+		download_list = []
 	for i in chap_num:
 		create_chapters(i)
-	if Globals.novel_data.novels.has(nov_name):
-		if Globals.novel_data.novels[nov_name].current_chapter != 0:
+	if Globals.novel_data.novels.has(nov_path):
+		if Globals.novel_data.novels[nov_path].current_chapter != 0:
 			currently_reading.text = "Currently reading Chapter %s"%(
-				Globals.novel_data.novels[nov_name].current_chapter)
+				Globals.novel_data.novels[nov_path].current_chapter)
 
 func set_cover(img:Texture):
 	novel_cover.texture = img
 
-func _update_filter(id):
+func set_author_and_status(author:String="", status:String = ""): # the other one
+	if author:
+		novel_author.text = author
+	if status:
+		novel_status.text = status
+
+func genrate_from_novel_url(novel_url):
+	novel_data = Globals.novel_data.novels[novel_url]
+	generate_content(novel_url, novel_data.name, novel_data.max_chapter_num, novel_data.desc)
+	set_cover(Globals.novel_data.load_image(novel_data))
+	set_author_and_status(novel_data.author, novel_data.status)
+
+func _update_filter(id:int):
 	var filters = filterbutton.get_popup().get_item_text(id)
 	match filters:
 		"None":
@@ -65,7 +99,7 @@ func _update_filter(id):
 			pass
 
 func create_chapters(key):
-	var button = Button.new()
+	var button = PassthroughButton.new()#Button.new()
 	button.custom_minimum_size.y = 40
 	button.text = "Chapter %s"%[key+1]
 	button.icon = DOWNLOAD if key+1 not in download_list else CHECK_LINE
@@ -98,6 +132,7 @@ func update_max(new_max: int):
 	chapters.text = "Chapters(%s)"% new_max
 
 func send_post_request(novel:String, num:int):
+	request_handeled = true
 	var url = "https://novelextractor.vercel.app/extract_text"
 	var json_data = {
 		"novel": novel,
@@ -122,21 +157,23 @@ func _on_HTTPRequest_request_completed(_result, response_code, _headers, jsonbod
 		if json and "text" in json:
 			var result_text = json["text"]
 			var num = download_queue.pop_front()
-			Globals.novel_data.novels[Globals.selected_novel].chapters[num] = result_text
+			Globals.novel_data.save_chapter_text(
+				novel_data,
+				num,
+				result_text,
+				current_novel
+			)
 			update_chapters(num-1, false)
 			if !download_queue.is_empty():
 				send_post_request(Globals.selected_novel, download_queue[0])
+			else:
+				request_handeled = false
+			return
 		else:
 			push_error("Missing 'text' field in response.")
 	else:
 		push_error("HTTP Error %s" % response_code)
-
-func _on_updatebutton_pressed() -> void:
-	var new_max: int = max_chapters.text.to_int()
-	if new_max > 0:
-		Globals.novel_data.novels[Globals.selected_novel].max_chapter_num = new_max
-		update_max(new_max)
-		Globals.save_info()
+	request_handeled = false
 
 func _on_download_pressed() -> void:
 	var new_min: int = max(from.text.to_int(), 1)
@@ -147,26 +184,17 @@ func _on_download_pressed() -> void:
 		if i not in download_queue:
 			download_queue.append(i) 
 			# add queues of a general que a processing linked to the various http requests
-	send_post_request(Globals.selected_novel, download_queue[0])
+	if !request_handeled:
+		send_post_request(Globals.selected_novel, download_queue[0])
+	customdownloadpopuup.hide()
 
 func _on_play_pressed() -> void:
 	if Globals.selected_novel and Globals.novel_data.novels[Globals.selected_novel].current_chapter != 0:
 		Globals.selected_chapter = Globals.novel_data.novels[Globals.selected_novel].current_chapter
 		self.on_next_pressed()
 
-func _on_downloadtoggle_toggled(toggled_on: bool) -> void:
-	chapterdownload.visible = toggled_on
-	if toggled_on:
-		downloadtoggle.icon = close
-	else:
-		downloadtoggle.icon = ARROW_DOWN_TO_LINE
-
-func _on_updatetoggle_toggled(toggled_on: bool) -> void:
-	update.visible = toggled_on
-	if toggled_on:
-		updatetoggle.icon = close
-	else:
-		updatetoggle.icon = CIRCLE_ELLIPSIS
+func _on_updatetoggle_toggled(_toggled_on: bool) -> void: # call the update function instead and play animation for it
+	pass
 
 func _on_expand_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
@@ -177,3 +205,51 @@ func _on_expand_button_toggled(toggled_on: bool) -> void:
 		novel_desc.max_lines_visible = 2
 	novel_desc.text += " "
 	novel_desc.text = novel_desc.text.rstrip(" ")
+
+func interact_with_lib():
+	if Globals.novel_data.novels.has(current_novel):
+		Globals.novel_data.delete_info(current_novel)
+		Globals.novel_data.novels.erase(current_novel)
+		save_button.icon = BOOK_OPEN
+	else:
+		print(novel_data.name)
+		print(novel_data.image_path)
+		print(novel_data.max_chapter_num)
+		Globals.novel_data.novels[current_novel] = novel_data
+		save_button.icon = CIRCLE_CHECK_BIG
+
+func check_lib():
+	if Globals.novel_data.novels.has(current_novel):
+		save_button.icon = CIRCLE_CHECK_BIG
+	else:
+		save_button.icon = BOOK_OPEN
+	novel_data = NovelData.new()
+
+func _download_chapters(id: int): # might have an error
+	var filters = downloadbutton.get_popup().get_item_text(id)
+	var download_amount = 0
+	match filters:
+		"Next Chapter":
+			download_amount = 1
+		"Next 5 Chapters":
+			download_amount = 5
+		"Next 10 Chapters":
+			download_amount = 10
+		"Custom Download":
+			customdownloadpopuup.show()
+			return
+		"Delete Downloads":
+			return
+	var download_max = download_queue.max()
+	var chapter_max = novel_data.chapters.keys().max()
+	download_max = 0 if download_max == null else download_max
+	var next = max(chapter_max, download_max)+1
+	for i in range(next, min(next+download_amount, novel_data.max_chapter_num-1)):
+		if i not in download_queue:
+			download_queue.append(i)
+	if !request_handeled:
+		send_post_request(Globals.selected_novel, download_queue[0])
+
+func on_prev_pressed():
+	super.on_prev_pressed()
+	Globals.selected_novel = ""
