@@ -3,9 +3,7 @@
 **NovelFlow** is a beautiful mobile app built with [Godot Engine](https://godotengine.org/) and powered by a Python backend. It brings you a smooth, immersive experience for reading novels — with **text-to-speech**, **auto page turns**, and the freedom to read or listen from anywhere.
 
 ---
-![Screenshot 1](https://i.imgur.com/607TDtr.png)
-![Screenshot 2](https://i.imgur.com/NhCVW0u.png)
-![Screenshot 3](https://i.imgur.com/AmZT4Qx.png)
+<div align="center"> <img src="https://i.imgur.com/607TDtr.png" alt="Screenshot 1" width="250"/> <img src="https://i.imgur.com/NhCVW0u.png" alt="Screenshot 2" width="250"/> <img src="https://i.imgur.com/AmZT4Qx.png" alt="Screenshot 3" width="250"/> </div>
 ## 🌟 Features
 
 * 📚 **Read Novels Anywhere**
