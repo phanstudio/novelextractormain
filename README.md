@@ -4,6 +4,8 @@
 
 ---
 <div align="center"> <img src="https://i.imgur.com/607TDtr.png" alt="Screenshot 1" width="250"/> <img src="https://i.imgur.com/NhCVW0u.png" alt="Screenshot 2" width="250"/> <img src="https://i.imgur.com/AmZT4Qx.png" alt="Screenshot 3" width="250"/> </div>
+![Screenshot 4](https://i.imgur.com/TUtHGOM.jpg)
+![Screenshot 5](https://i.imgur.com/HEZ8w1g.jpg)
 ## 🌟 Features
 
 * 📚 **Read Novels Anywhere**
