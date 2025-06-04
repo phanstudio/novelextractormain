@@ -1,4 +1,3 @@
-
 extends Page
 
 @onready var novel_holder: HFlowContainer = %novel_holder
@@ -21,14 +20,19 @@ const NOVEL_CONTAINER = preload("res://scene/custom_components/novel_container.t
 # create a go to library feature
 
 func _ready() -> void:
-	#update_request.request_completed.connect(process_browse_request)
+	update_request.request_completed.connect(process_browse_request)
 	for i in novel_holder.get_children():
 		novel_holder.remove_child(i)
+	#print(Time.get_date_string_from_unix_time(Time.get_unix_time_from_system()))
+	#var elapsed_minutes = elapsed_seconds / 60
+	#var elapsed_hours = elapsed_seconds / 3600
+	#var elapsed_days = elapsed_seconds / 86400
+	#var elapsed_weeks = elapsed_seconds / (86400 * 7)
 
-func send_post_request(genre:String):
-	var url = "https://novelextractor.vercel.app/browse"
+func send_post_request(path:String):
+	var url = "https://novelextractor.vercel.app/update"
 	var json_data = {
-		"genre": genre,
+		"path": path,
 	}
 
 	var headers = ["Content-Type: application/json"]
@@ -46,10 +50,10 @@ func send_post_request(genre:String):
 func process_browse_request(_result, response_code, _headers, jsonbody):
 	if response_code == 200:
 		var json = JSON.parse_string(jsonbody.get_string_from_utf8())
-		browesed_list = json["novels"] # add advanced stuff like updating and pages later, also categories
-		if !searching:
-			_load_browsed_content()
-			return
+		browesed_list = json["last_update"] # add advanced stuff like updating and pages later, also categories
+		#if !searching:
+			#_load_browsed_content()
+			#return
 	novel_holder.hide()
 	show_error("No Network")
 
@@ -72,12 +76,10 @@ func load_item(list:Array):
 			#novel_container.image_loaded.connect(func(): error_page.hide(); loading_bar.hide(); novel_holder.show())
 		#novel_container.pressed.connect(_open_novel.bind(i, novel_container.image))
 
-func _on_close_pressed() -> void:
-	pass
-
 func _on_tab_container_tab_changed(tab: int) -> void:
 	if tab != 1: # should we load it when we are here
 		pass
+
 func show_error(value:String= "Something went wrong"):
 	error_label.text = value
 	error_page.show()

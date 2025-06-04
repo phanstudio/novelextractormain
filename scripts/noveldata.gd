@@ -10,4 +10,7 @@ class_name NovelData
 @export var author: String = ""
 @export var genres: Array[String] = [] # can become genre enum
 @export var status: String = "" # can become Status enum
+@export var last_update_time: float = 0.0 # change as appropriate
+@export var last_update_amount: int = 0
+#@export var read_list: Array[int] = []
 # add from where later # website
