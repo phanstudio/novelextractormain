@@ -19,6 +19,7 @@ var auto:bool = false
 var stopped_pressed:bool = false
 var b_group
 var skip_chapters = 0
+var tts_model: BaseTTSModel
 
 const AUDIO_LINES = preload("res://assets/svg/audio-lines.svg")
 const AUDIO_WAVEFORM = preload("res://assets/svg/audio-waveform.svg")
@@ -39,9 +40,22 @@ func _ready() -> void:
 	if Globals.selected_novel:
 		novel_name.text = Globals.selected_novel
 		chapter_list = Globals.novel_data.novels[Globals.selected_novel].chapters.keys()
+		if OS.has_feature("android"):
+			tts_model = AndriodTTSModel.new()
+			tts_model.chap_path_list = Array(chapter_list.map(func(element): return "chapter_%s.txt"%element), TYPE_STRING, "", null)
+			tts_model.chap_url = Globals.novel_data.novels[
+				Globals.selected_novel].chapters.values()[0].split("/chapter_")[0]
+			#tts_model.selected_chapter = Globals.selected_chapter
+		else:
+			tts_model = DefualtTTSModel.new()
+		tts_model.selected_chapter = Globals.selected_chapter
+		tts_model.chapter_list = chapter_list
+		tts_model.change_chapter.connect(_on_change_chapter)
+		tts_model.verse_changed.connect(_on_verse_changed)
+		add_child(tts_model)
 		load_novel()
 	voice_id = Globals.voice_id
-	DisplayServer.tts_set_utterance_callback(DisplayServer.TTS_UTTERANCE_ENDED, _stopped)
+	#DisplayServer.tts_set_utterance_callback(DisplayServer.TTS_UTTERANCE_ENDED, _stopped)
 
 func load_novel():
 	if Globals.selected_novel:
@@ -55,9 +69,9 @@ func load_novel():
 		tts_chunks = split_text(remove_filler(loaded_text))
 		tts_index = 0
 		update_max(tts_chunks.size())
-		if auto:
-			play.toggled.emit(true)
-			play.set_pressed_no_signal(true)
+		#if auto:
+			#play.toggled.emit(true)
+			#play.set_pressed_no_signal(true)
 
 func update_max(new_max:int):
 	var old_max:int = chapbody.get_child_count()
@@ -87,7 +101,8 @@ func create_verses(num:int):
 	chapbody.add_child(button)
 
 func _seek(): # can add a check for if playing
-	DisplayServer.tts_stop()
+	tts_model.tts_index = tts_index
+	tts_model.seek()
 	play_audio()
 	play.set_pressed_no_signal(true)
 
@@ -108,6 +123,15 @@ func next():
 		Globals.selected_chapter = chapter_list[pos +1]
 		load_novel()
 
+func _on_change_chapter(new_chapter): # don't forget about +1 pos
+	pos = max(min(new_chapter, chapter_list.size() - 1), 0)
+	if pos < chapter_list.size() - 1:
+		Globals.selected_chapter = chapter_list[pos]
+		load_novel()
+
+func _on_verse_changed(new_verse):
+	update_verse(new_verse, true)
+
 func _on_prevbutton_pressed() -> void:
 	if pos > 0:
 		DisplayServer.tts_stop()
@@ -115,27 +139,24 @@ func _on_prevbutton_pressed() -> void:
 		load_novel()
 
 func _on_pause_pressed() -> void:
-	if DisplayServer.tts_is_paused():
-		DisplayServer.tts_resume()
+	tts_model._on_pause_pressed()
+	if tts_model.is_playing:
 		pause.icon = PAUSE
 	else:
-		DisplayServer.tts_pause()
 		pause.icon = STEP_FORWARD
 
 func _on_play_toggled(toggled_on: bool) -> void:
+	tts_model._on_play_toggled(toggled_on)
 	if toggled_on:
 		stopped_pressed = false
-		tts_index = 0
 		play_audio()
 	else:
 		stopped_pressed = true
 		play.icon = AUDIO_LINES
 		pause.hide()
 		update_verse(tts_index, false)
-		DisplayServer.tts_stop()
 
-func play_audio():
-	_speak_next_chunk()
+func play_audio(): # change to a ui thing
 	play.icon = CIRCLE_STOP
 	pause.show()
 	pause.icon = PAUSE
@@ -161,9 +182,9 @@ func _speak_next_chunk():
 func update_verse(index:int, value:bool = false):
 	if index < chapbody.get_child_count():
 		var update_button = chapbody.get_child(index) as Button
-		update_button.button_pressed = value
-		#update_button.set_pressed_no_signal(value)
-		update_button.grab_focus()
+		if update_button.button_pressed != value:
+			update_button.button_pressed = value
+			update_button.grab_focus()
 
 func split_text(text: String, max_length: int = 300) -> Array:
 	var regex := RegEx.new()

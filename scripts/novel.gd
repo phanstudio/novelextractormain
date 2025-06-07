@@ -18,6 +18,7 @@ extends Page
 @onready var novel_data: NovelData= NovelData.new()
 @onready var downloadbutton: MenuButton = %downloadbutton
 @onready var customdownloadpopuup: PopupPanel = %customdownloadpopuup
+@onready var update_request: HTTPRequest = %updateRequest
 
 @export var not_main:bool = false
 
@@ -38,10 +39,13 @@ const CHEVRON_UP = preload("res://assets/svg/chevron-up.svg")
 const CHEVRON_DOWN = preload("res://assets/svg/chevron-down.svg")
 const CIRCLE_CHECK_BIG = preload("res://assets/svg/circle-check-big.svg")
 const BOOK_OPEN = preload("res://assets/svg/book-open.svg")
+const REFRESH_CW = preload("res://assets/svg/refresh-cw.svg")
+const SEARCH = preload("res://assets/svg/search.svg")
 
 func _ready():
 	super._ready()
 	http_request.request_completed.connect(_on_HTTPRequest_request_completed)
+	update_request.request_completed.connect(process_update_request)
 	current_novel = Globals.selected_novel
 	if Globals.novel_data.novels.has(current_novel):
 		genrate_from_novel_url(current_novel)
@@ -141,8 +145,26 @@ func send_post_request(novel:String, num:int):
 
 	var headers = ["Content-Type: application/json"]
 	var jsonbody = JSON.stringify(json_data)
-
+	print(num)
 	var err = http_request.request(
+		url,
+		headers,
+		HTTPClient.METHOD_POST,
+		jsonbody
+	)
+	if err != OK:
+		push_error("HTTP request failed to start: %s" % err)
+
+func send_update_request(novel:String):
+	request_handeled = true
+	var url = "https://novelextractor.vercel.app/update"
+	var json_data = {
+		"path": novel,
+	}
+	updatetoggle.icon = SEARCH
+	var headers = ["Content-Type: application/json"]
+	var jsonbody = JSON.stringify(json_data)
+	var err = update_request.request(
 		url,
 		headers,
 		HTTPClient.METHOD_POST,
@@ -175,6 +197,17 @@ func _on_HTTPRequest_request_completed(_result, response_code, _headers, jsonbod
 		push_error("HTTP Error %s" % response_code)
 	request_handeled = false
 
+func process_update_request(_result, response_code, _headers, jsonbody):
+	if response_code == 200:
+		var json = JSON.parse_string(jsonbody.get_string_from_utf8())
+		updatetoggle.icon = REFRESH_CW
+		novel_data.max_chapter_num = json["last_update"].to_int()
+		update_max(novel_data.max_chapter_num)
+		Globals.novel_data.novels[current_novel] = novel_data
+		Globals.save_info()
+	else:
+		print("show reload button and error screen")
+
 func _on_download_pressed() -> void:
 	var new_min: int = max(from.text.to_int(), 1)
 	var new_max: int = min(max(to.text.to_int(), new_min+1), chapters.text.to_int())
@@ -193,9 +226,6 @@ func _on_play_pressed() -> void:
 		Globals.selected_chapter = Globals.novel_data.novels[Globals.selected_novel].current_chapter
 		self.on_next_pressed()
 
-func _on_updatetoggle_toggled(_toggled_on: bool) -> void: # call the update function instead and play animation for it
-	pass
-
 func _on_expand_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		expand_button.icon = CHEVRON_UP
@@ -212,9 +242,6 @@ func interact_with_lib():
 		Globals.novel_data.novels.erase(current_novel)
 		save_button.icon = BOOK_OPEN
 	else:
-		print(novel_data.name)
-		print(novel_data.image_path)
-		print(novel_data.max_chapter_num)
 		Globals.novel_data.novels[current_novel] = novel_data
 		save_button.icon = CIRCLE_CHECK_BIG
 
@@ -241,9 +268,15 @@ func _download_chapters(id: int): # might have an error
 		"Delete Downloads":
 			return
 	var download_max = download_queue.max()
-	var chapter_max = novel_data.chapters.keys().max()
+	var chap_keys = novel_data.chapters.keys()
+	var chapter_max = chap_keys.max() if chap_keys.size() > 0 else 0
 	download_max = 0 if download_max == null else download_max
-	var next = max(chapter_max, download_max)+1
+	var next = 1
+	if download_queue.size() > 0 or chapter_max == 0:
+		next += download_max #max(download_max, 1)
+	else:
+		next += chapter_max #max(chapter_max, )
+	
 	for i in range(next, min(next+download_amount, novel_data.max_chapter_num-1)):
 		if i not in download_queue:
 			download_queue.append(i)
@@ -253,3 +286,6 @@ func _download_chapters(id: int): # might have an error
 func on_prev_pressed():
 	super.on_prev_pressed()
 	Globals.selected_novel = ""
+
+func _on_updatetoggle_pressed() -> void:
+	send_update_request(current_novel)

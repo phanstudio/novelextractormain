@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Novelextractor"
 config/version="1.5"
+config/tags=PackedStringArray("ui")
 run/main_scene="uid://flu6c3mv3dem"
 config/features=PackedStringArray("4.4", "Mobile")
 run/low_processor_mode=true
@@ -33,6 +34,10 @@ Globals="*res://autoload/globals.gd"
 window/stretch/aspect="ignore"
 window/stretch/scale=1.5
 window/handheld/orientation=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GodotAndroidPluginTemplate/plugin.cfg")
 
 [gui]
 

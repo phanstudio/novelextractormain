@@ -143,6 +143,9 @@ prev_button = NodePath("MarginContainer/Novel/title/close")
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 unique_name_in_owner = true
 
+[node name="updateRequest" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -421,7 +424,7 @@ layout_mode = 2
 text = "download"
 icon = ExtResource("3_yk7lt")
 
-[connection signal="toggled" from="MarginContainer/Novel/title/updatetoggle" to="." method="_on_updatetoggle_toggled"]
+[connection signal="pressed" from="MarginContainer/Novel/title/updatetoggle" to="." method="_on_updatetoggle_pressed"]
 [connection signal="toggled" from="MarginContainer/Novel/ScrollContainer/body/VBoxContainer/ExpandButton" to="." method="_on_expand_button_toggled"]
 [connection signal="pressed" from="MarginContainer/Novel/ScrollContainer/body/currently_reading" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MarginContainer/Novel/Control/play" to="." method="_on_play_pressed"]
