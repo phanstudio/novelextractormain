@@ -9,6 +9,7 @@ var current_chapter: String = ""
 var chap_path_list:Array[String] = []
 var chap_url: String = ""
 
+## for loading
 func tts_load():
 	setup_media_notification()
 
@@ -31,7 +32,7 @@ func setup_media_notification():
 	else:
 		print("MediaStyle notification plugin not available")
 
-func _on_reading_progress_updated(main_chapter: int, total_chapters: int, current_chunk: int, total_chunks: int, is_queue_mode: bool, chapter_title: String):
+func _on_reading_progress_updated(main_chapter: int, total_chapters: int, current_chunk: int, total_chunks: int, is_queue_mode: bool, _chapter_title: String):
 	if is_queue_mode:
 		# Calculate overall progress across all chapters
 		var chapter_progress = float(main_chapter) / float(total_chapters) if total_chapters > 0 else 0.0
@@ -44,6 +45,7 @@ func _on_reading_progress_updated(main_chapter: int, total_chapters: int, curren
 			overall_progress * 100.0
 		])
 		verse_changed.emit(current_chunk)
+		#change_chapter.emit(main_chapter)
 		
 		# Check if reading is complete
 		#if current_chapter == -1 and current_chunk == -1:
@@ -61,20 +63,21 @@ func show_media_notification_if_playing():
 	if play_pressed and media_notification_plugin:
 		update_media_notification()
 
-func _on_nextbutton_pressed() -> void:
-	next()
-
-func next():
+func next() -> void:
 	if pos < chapter_list.size() - 1:
-		media_notification_plugin.stopTTSPlayback()
+		media_notification_plugin.stopQueue()
 		selected_chapter = chapter_list[pos + 1]
-		load_novel()
+		media_notification_plugin.nextChapter()
 
-func _on_prevbutton_pressed() -> void:
+func prev() -> void:
 	if pos > 0:
-		media_notification_plugin.stopTTSPlayback()
+		media_notification_plugin.stopQueue()
 		selected_chapter = chapter_list[pos - 1]
-		load_novel()
+		media_notification_plugin.previousChapter()
+
+func stop() -> void: # cancel
+	if media_notification_plugin:
+		media_notification_plugin.stopQueue()
 
 func _on_pause_pressed() -> void:
 	is_playing = !is_playing # add in update state
@@ -101,7 +104,6 @@ func seek():
 
 func _on_media_button_pressed(button_type: String):
 	print("Media button pressed from notification: ", button_type)
-	
 	#match button_type:
 		#"play_pause":
 			#_on_play_toggled(!play_pressed)
@@ -113,8 +115,8 @@ func _on_media_button_pressed(button_type: String):
 			#_on_nextbutton_pressed()
 
 func _on_playback_state_changed(playing: bool):
-	print(is_playing)
 	is_playing = playing
+	playing_changed.emit(playing)
 
 func _on_change_chapter(chapterIndex: int, _chapterTitle: String, _totalChapters: int):
 	change_chapter.emit(chapterIndex)

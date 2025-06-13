@@ -138,6 +138,7 @@ func update_max(new_max: int):
 func send_post_request(novel:String, num:int):
 	request_handeled = true
 	var url = "https://novelextractor.vercel.app/extract_text"
+	#prints(novel, num)
 	var json_data = {
 		"novel": novel,
 		"num": str(num)
@@ -145,7 +146,6 @@ func send_post_request(novel:String, num:int):
 
 	var headers = ["Content-Type: application/json"]
 	var jsonbody = JSON.stringify(json_data)
-	print(num)
 	var err = http_request.request(
 		url,
 		headers,
@@ -187,7 +187,7 @@ func _on_HTTPRequest_request_completed(_result, response_code, _headers, jsonbod
 			)
 			update_chapters(num-1, false)
 			if !download_queue.is_empty():
-				send_post_request(Globals.selected_novel, download_queue[0])
+				send_post_request(current_novel, download_queue[0])
 			else:
 				request_handeled = false
 			return
@@ -205,6 +205,7 @@ func process_update_request(_result, response_code, _headers, jsonbody):
 		update_max(novel_data.max_chapter_num)
 		Globals.novel_data.novels[current_novel] = novel_data
 		Globals.save_info()
+		request_handeled = false
 	else:
 		print("show reload button and error screen")
 
@@ -218,12 +219,12 @@ func _on_download_pressed() -> void:
 			download_queue.append(i) 
 			# add queues of a general que a processing linked to the various http requests
 	if !request_handeled:
-		send_post_request(Globals.selected_novel, download_queue[0])
+		send_post_request(current_novel, download_queue[0])
 	customdownloadpopuup.hide()
 
 func _on_play_pressed() -> void:
-	if Globals.selected_novel and Globals.novel_data.novels[Globals.selected_novel].current_chapter != 0:
-		Globals.selected_chapter = Globals.novel_data.novels[Globals.selected_novel].current_chapter
+	if current_novel and Globals.novel_data.novels[current_novel].current_chapter != 0:
+		Globals.selected_chapter = Globals.novel_data.novels[current_novel].current_chapter
 		self.on_next_pressed()
 
 func _on_expand_button_toggled(toggled_on: bool) -> void:
@@ -270,7 +271,7 @@ func _download_chapters(id: int): # might have an error
 	var download_max = download_queue.max()
 	var chap_keys = novel_data.chapters.keys()
 	var chapter_max = chap_keys.max() if chap_keys.size() > 0 else 0
-	download_max = 0 if download_max == null else download_max
+	download_max = download_queue.max() if download_queue.size() > 0 else 0
 	var next = 1
 	if download_queue.size() > 0 or chapter_max == 0:
 		next += download_max #max(download_max, 1)
@@ -281,7 +282,7 @@ func _download_chapters(id: int): # might have an error
 		if i not in download_queue:
 			download_queue.append(i)
 	if !request_handeled:
-		send_post_request(Globals.selected_novel, download_queue[0])
+		send_post_request(current_novel, download_queue[0])
 
 func on_prev_pressed():
 	super.on_prev_pressed()

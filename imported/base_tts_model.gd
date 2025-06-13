@@ -10,8 +10,12 @@ var selected_chapter = 1
 var chapters: Array[String]
 var is_playing: bool
 
+@warning_ignore("unused_signal")
 signal change_chapter(current_chapter: int)
+@warning_ignore("unused_signal")
 signal verse_changed(current_verse: int)
+@warning_ignore("unused_signal")
+signal playing_changed(value: bool)
 
 func _ready() -> void:
 	tts_load()
@@ -28,7 +32,13 @@ func _on_nextbutton_pressed() -> void:
 func next():
 	pass
 
+func prev():
+	pass
+
 func seek():
+	pass
+
+func stop():
 	pass
 
 func _on_prevbutton_pressed() -> void:

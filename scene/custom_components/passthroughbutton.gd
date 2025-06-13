@@ -1,7 +1,7 @@
 extends Button
 class_name PassthroughButton
 
-@export var hold_threshold := 0.1  # seconds
+@export var hold_threshold := 0.05  # seconds
 
 var _is_pressed := false
 var _hold_timer := 0.0
@@ -29,10 +29,10 @@ func _on_press() -> void:
 func _on_release() -> void:
 	if _is_pressed:
 		if _hold_timer >= hold_threshold:
-			print("Held!")
+			#print("Held!")
 			_on_hold()
 		else:
-			print("Tapped!")
+			#print("Tapped!")
 			_on_tap()
 	_is_pressed = false
 

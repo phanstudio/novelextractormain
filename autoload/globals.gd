@@ -5,6 +5,7 @@ var selected_novel: String
 var selected_chapter: int
 var max_chapters: int
 var voice_id
+#var loaded: String
 
 func _ready() -> void:
 	var voices = DisplayServer.tts_get_voices_for_language("en")

@@ -21,7 +21,6 @@ var tween: Tween
 var error_tween: Tween
 
 const NOVEL_CONTAINER = preload("res://scene/custom_components/novel_container.tscn")
-# create a go to library feature
 
 func _ready() -> void:
 	send_post_request("Fantasy")
